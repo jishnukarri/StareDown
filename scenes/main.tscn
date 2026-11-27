@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://dgx64fmceyigw"]
+
+[ext_resource type="MeshLibrary" uid="uid://c8hwca42htdxy" path="res://Maze_Library.tres" id="1_sugp2"]
+[ext_resource type="Script" uid="uid://cc1maibnu0xv" path="res://scripts/grid_map/grid_map.gd" id="2_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://dkwatx0ruyqiw" path="res://scenes/player.tscn" id="3_tbgi4"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tipki"]
+
+[sub_resource type="Sky" id="Sky_jyhfs"]
+sky_material = SubResource("ProceduralSkyMaterial_tipki")
+process_mode = 2
+
+[sub_resource type="Environment" id="Environment_sugp2"]
+background_mode = 1
+background_energy_multiplier = 3.4
+sky = SubResource("Sky_jyhfs")
+
+[node name="main" type="Node3D" unique_id=1973873307]
+
+[node name="GridMap" type="GridMap" parent="." unique_id=771196165]
+mesh_library = ExtResource("1_sugp2")
+cell_size = Vector3(3, 3, 3)
+cell_center_y = false
+script = ExtResource("2_jyhfs")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1537629569]
+visible = false
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=219054538]
+environment = SubResource("Environment_sugp2")
+
+[node name="Player" parent="." unique_id=1924436231 instance=ExtResource("3_tbgi4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2, 6)

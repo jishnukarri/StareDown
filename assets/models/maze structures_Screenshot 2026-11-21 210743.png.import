@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e82o12maf3df"
-path.s3tc="res://.godot/imported/maze structures_Screenshot 2026-11-21 204231.png-33a16060413d75cfc7a416dcd30d873a.s3tc.ctex"
+uid="uid://eyg4oerr2vhc"
+path.s3tc="res://.godot/imported/maze structures_Screenshot 2026-11-21 210743.png-c98b62175c961472f679e8a5edabbcb1.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "3aed0a0803249a5ca4661475dce10d68"
+"md5": "8124c6c1ad7d3ad957fa53a43a993b1a"
 }
 
 [deps]
 
-source_file="res://assets/maze structures_Screenshot 2026-11-21 204231.png"
-dest_files=["res://.godot/imported/maze structures_Screenshot 2026-11-21 204231.png-33a16060413d75cfc7a416dcd30d873a.s3tc.ctex"]
+source_file="res://assets/models/maze structures_Screenshot 2026-11-21 210743.png"
+dest_files=["res://.godot/imported/maze structures_Screenshot 2026-11-21 210743.png-c98b62175c961472f679e8a5edabbcb1.s3tc.ctex"]
 
 [params]
 
