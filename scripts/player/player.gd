@@ -28,7 +28,7 @@ extends CharacterBody3D
 @onready var spotlight: SpotLight3D = find_child("SpotLight3D", true, false)
 
 
-var _step_index: int = 0.0
+var _step_index: int = 0
 var _step_timer: float = 0.0
 
 var base_fov: float = 75.0
