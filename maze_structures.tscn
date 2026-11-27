@@ -31,7 +31,7 @@ data = PackedVector3Array(-1.5002999, 4.9, 1.9950999, 1.4997, 4.9, 0.9975, 1.499
 
 [node name="maze structures" unique_id=806496046 instance=ExtResource("1_8sjnt")]
 
-[node name="Big room" parent="." index="0" unique_id=925705182]
+[node name="Big room" parent="." index="0" unique_id=1027644653]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Big room" index="0" unique_id=575347127]
@@ -39,7 +39,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Big room/StaticBody3D" index="0" unique_id=1758175833]
 shape = SubResource("ConcavePolygonShape3D_8sjnt")
 
-[node name="Junction (3 way)" parent="." index="1" unique_id=2031669675]
+[node name="Junction (3 way)" parent="." index="1" unique_id=2085819928]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Junction (3 way)" index="0" unique_id=122181870]
@@ -47,7 +47,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Junction (3 way)/StaticBody3D" index="0" unique_id=2050564071]
 shape = SubResource("ConcavePolygonShape3D_xdnie")
 
-[node name="Junction (4way)" parent="." index="2" unique_id=2075237770]
+[node name="Junction (4way)" parent="." index="2" unique_id=411778158]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Junction (4way)" index="0" unique_id=345585672]
@@ -55,7 +55,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Junction (4way)/StaticBody3D" index="0" unique_id=203840051]
 shape = SubResource("ConcavePolygonShape3D_fdhw4")
 
-[node name="Mossy stone" parent="." index="3" unique_id=678474915]
+[node name="Mossy stone" parent="." index="3" unique_id=2144743321]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Mossy stone" index="0" unique_id=1950610526]
@@ -63,7 +63,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mossy stone/StaticBody3D" index="0" unique_id=1056108834]
 shape = SubResource("ConcavePolygonShape3D_0n6nr")
 
-[node name="Mossy stone (long)" parent="." index="4" unique_id=1013397534]
+[node name="Mossy stone (long)" parent="." index="4" unique_id=1383058059]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Mossy stone (long)" index="0" unique_id=21221041]
@@ -71,7 +71,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mossy stone (long)/StaticBody3D" index="0" unique_id=1282856263]
 shape = SubResource("ConcavePolygonShape3D_gfv45")
 
-[node name="Mossy stone (short)" parent="." index="5" unique_id=464782084]
+[node name="Mossy stone (short)" parent="." index="5" unique_id=1974553953]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Mossy stone (short)" index="0" unique_id=1905219385]
@@ -79,7 +79,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mossy stone (short)/StaticBody3D" index="0" unique_id=1781911820]
 shape = SubResource("ConcavePolygonShape3D_qttp0")
 
-[node name="Regular stone" parent="." index="6" unique_id=449523405]
+[node name="Regular stone" parent="." index="6" unique_id=1612276744]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Regular stone" index="0" unique_id=27986471]
@@ -87,7 +87,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Regular stone/StaticBody3D" index="0" unique_id=170186756]
 shape = SubResource("ConcavePolygonShape3D_bh5fc")
 
-[node name="regular stone (long)" parent="." index="7" unique_id=1007897200]
+[node name="regular stone (long)" parent="." index="7" unique_id=1176730673]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="regular stone (long)" index="0" unique_id=1181742739]
@@ -95,7 +95,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="regular stone (long)/StaticBody3D" index="0" unique_id=1376994152]
 shape = SubResource("ConcavePolygonShape3D_rc5f4")
 
-[node name="Regular stone (short)" parent="." index="8" unique_id=254942586]
+[node name="Regular stone (short)" parent="." index="8" unique_id=2050321783]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Regular stone (short)" index="0" unique_id=1413857669]

@@ -11,9 +11,25 @@ extends CharacterBody3D
 @export var regen_delay: float = 1.0
 @export var exhausted_fov_drop: float = 16.0
 
+@export var footstep_sounds: Array[AudioStream] = [
+	preload("res://assets/sound_effects/Footsteps_1.wav"),
+	preload("res://assets/sound_effects/Footsteps_2.wav"),
+	preload("res://assets/sound_effects/Footsteps_3.wav"),
+	preload("res://assets/sound_effects/Footsteps_4.wav")
+]
+@export var walk_step_interval: float = 0.5
+@export var sprint_step_interval: float = 0.32
+@export var random_step_sound: bool = false
+
+
+@onready var footstep_player: AudioStreamPlayer3D = $"footstep_player"
 @onready var camera: Camera3D = $Camera3D
 @onready var flashlight_mesh: Node3D = find_child("flashlight", true, false)
 @onready var spotlight: SpotLight3D = find_child("SpotLight3D", true, false)
+
+
+var _step_index: int = 0.0
+var _step_timer: float = 0.0
 
 var base_fov: float = 75.0
 var base_flashlight_pos: Vector3 = Vector3.ZERO
@@ -111,18 +127,37 @@ func _build_hud() -> void:
 	canvas.add_child(stamina_bar)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		rotate_y(-event.relative.x * mouse_sensitivity)
-		camera.rotate_x(-event.relative.y * mouse_sensitivity)
-		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-85.0), deg_to_rad(85.0))
-		mouse_sway += event.relative * 0.0012
-	elif event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("ui_cancel"):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	elif event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F:
+	elif event.is_action_pressed("flashlight"):
 		_toggle_flashlight()
+		print("A")
+
+@export var controller_sensitivity: float = 2.5
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		apply_look(event.relative * mouse_sensitivity, event.relative * 0.0012)
+
+func _process(delta: float) -> void:
+	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+		return
+		
+	var look_dir := Input.get_vector("look_left", "look_right", "look_up", "look_down")
+	if look_dir != Vector2.ZERO:
+		var look_amount := look_dir * controller_sensitivity * delta
+		# Scale look_amount to match mouse_sway strength
+		apply_look(look_amount, look_amount * 0.6)
+		
+	
+func apply_look(rotation_delta: Vector2, sway_delta: Vector2) -> void:
+	rotate_y(-rotation_delta.x)
+	camera.rotate_x(-rotation_delta.y)
+	camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-85.0), deg_to_rad(85.0))
+	mouse_sway += sway_delta
 
 func _toggle_flashlight() -> void:
 	flashlight_on = not flashlight_on
@@ -137,28 +172,56 @@ func _toggle_flashlight() -> void:
 					if mat is StandardMaterial3D and mat.emission_enabled:
 						mat.emission_energy_multiplier = 1.0 if flashlight_on else 0.0
 
+func _update_footsteps(delta: float, is_moving: bool, is_sprinting: bool) -> void:
+	# Only play footsteps when moving on the floor
+	if not is_on_floor() or not is_moving or footstep_sounds.is_empty():
+		_step_timer = 0.0
+		return
+
+	_step_timer -= delta
+	if _step_timer <= 0.0:
+		_play_next_footstep()
+		_step_timer = sprint_step_interval if is_sprinting else walk_step_interval
+
+func _play_next_footstep() -> void:
+	if random_step_sound:
+		# Pick a random index that isn't the exact same sound as last time
+		var next_index := randi() % footstep_sounds.size()
+		if footstep_sounds.size() > 1 and next_index == _step_index:
+			next_index = (_step_index + 1) % footstep_sounds.size()
+		_step_index = next_index
+	else:
+		# Play strictly in order: 0 -> 1 -> 2 -> 3 -> 0...
+		_step_index = (_step_index + 1) % footstep_sounds.size()
+
+	footstep_player.stream = footstep_sounds[_step_index]
+	# Slight pitch variation makes even 4 sounds feel much more natural
+	footstep_player.pitch_scale = randf_range(0.95, 1.05)
+	footstep_player.play()
+
+
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-	elif Input.is_physical_key_pressed(KEY_SPACE):
+	elif Input.is_action_just_pressed("jump"):
 		velocity.y = jump_velocity
 
-	var wasd := Vector2(
-		float(Input.is_physical_key_pressed(KEY_D)) - float(Input.is_physical_key_pressed(KEY_A)),
-		float(Input.is_physical_key_pressed(KEY_S)) - float(Input.is_physical_key_pressed(KEY_W))
-	)
-	var input_dir := wasd.normalized() if wasd.length() > 0.0 else Vector2.ZERO
+	# Replaces manual WASD math; supports both keyboard and analog stick tilt
+	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var is_moving := input_dir.length() > 0.0
 
-	var wants_sprint := Input.is_physical_key_pressed(KEY_SHIFT) and is_moving
+	var wants_sprint := Input.is_action_pressed("sprint") and is_moving
 	var is_sprinting := wants_sprint and stamina > 0.0 and not is_exhausted
 	
 	_update_stamina(delta, is_sprinting)
 	_update_exhaustion_visuals(delta)
-	
+	_update_footsteps(delta,is_moving,is_sprinting)
 	var current_speed := sprint_speed if is_sprinting else walk_speed
-	var direction := (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
-	if direction:
+	
+	# Do not call .normalized() here so partial analog stick tilts let you walk slowly
+	var direction := transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)
+	
+	if is_moving:
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
 	else:
@@ -167,6 +230,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	_update_flashlight_motion(delta, is_moving, is_sprinting)
+
 
 func _update_stamina(delta: float, is_sprinting: bool) -> void:
 	if is_sprinting:
