@@ -127,6 +127,11 @@ func _build_hud() -> void:
 	canvas.add_child(stamina_bar)
 
 func _unhandled_input(event: InputEvent) -> void:
+	# Browsers refuse pointer lock until a user gesture, so (re)capture on click.
+	if event is InputEventMouseButton and event.pressed and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("ui_cancel"):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -143,9 +148,9 @@ func _input(event: InputEvent) -> void:
 		apply_look(event.relative * mouse_sensitivity, event.relative * 0.0012)
 
 func _process(delta: float) -> void:
-	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
-		return
-		
+	# Keyboard/gamepad look is deliberately not gated on mouse capture: web
+	# builds can't capture the pointer until the first click, and movement
+	# keys aren't gated either.
 	var look_dir := Input.get_vector("look_left", "look_right", "look_up", "look_down")
 	if look_dir != Vector2.ZERO:
 		var look_amount := look_dir * controller_sensitivity * delta
